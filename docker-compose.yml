@@ -1,0 +1,88 @@
+# Demo / staging stack: app (nginx + php-fpm) + queue worker + scheduler + PostgreSQL, published over HTTPS by Caddy.
+# Secrets live in ./.env and ./Caddyfile next to this file (never committed). Start: docker compose up -d --build
+name: itizan
+
+x-app: &app
+  image: itizan-app:latest
+  restart: unless-stopped
+  env_file: .env
+  environment: &app-env
+    PHP_OPCACHE_ENABLE: "1"
+  depends_on:
+    db:
+      condition: service_healthy
+
+services:
+  app:
+    <<: *app
+    build: .
+    environment:
+      <<: *app-env
+      AUTORUN_ENABLED: "true"   # migrations + config/route/view cache on boot
+      SSL_MODE: "off"           # TLS is terminated by the tunnel / load balancer
+    ports:
+      - "127.0.0.1:8080:8080"   # not reachable from the internet; the tunnel talks to app:8080 on the compose network
+    volumes:
+      - storage:/var/www/html/storage
+
+  worker:
+    <<: *app
+    pull_policy: never
+    command: ["php", "artisan", "queue:work", "--sleep=3", "--tries=3", "--backoff=30", "--max-time=3600"]
+    healthcheck:
+      disable: true   # the image's check probes nginx, which this container does not run
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - storage:/var/www/html/storage
+
+  scheduler:
+    <<: *app
+    pull_policy: never
+    command: ["php", "artisan", "schedule:work"]
+    healthcheck:
+      disable: true
+    depends_on:
+      app:
+        condition: service_healthy
+    volumes:
+      - storage:/var/www/html/storage
+
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      TZ: Asia/Riyadh
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  # Public HTTPS entry point: obtains and renews the Let's Encrypt certificate for the domain in ./Caddyfile.
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      app:
+        condition: service_healthy
+
+volumes:
+  pgdata:
+  storage:
+  caddy_data:
+  caddy_config:

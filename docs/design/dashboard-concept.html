@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اتزان — تصور لوحة العميل</title>
+<style>
+@font-face{font-family:"IBM Plex Sans Arabic";font-weight:400;font-display:swap;src:url(../../node_modules/@fontsource/ibm-plex-sans-arabic/files/ibm-plex-sans-arabic-arabic-400-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Sans Arabic";font-weight:500;font-display:swap;src:url(../../node_modules/@fontsource/ibm-plex-sans-arabic/files/ibm-plex-sans-arabic-arabic-500-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Sans Arabic";font-weight:700;font-display:swap;src:url(../../node_modules/@fontsource/ibm-plex-sans-arabic/files/ibm-plex-sans-arabic-arabic-700-normal.woff2) format("woff2")}
+:root{--ivory:#FAF8F4;--petrol:#16645B;--petrol-dark:#0F4A43;--mint:#E5F2EC;--peach:#F3C6AD;--peach-soft:#FBE9DE;--ink:#20332F;--ink-soft:#4B5F5A;--line:#E6E0D5;--r:22px;--shadow:0 1px 2px rgba(32,51,47,.05),0 10px 30px -12px rgba(32,51,47,.18)}
+*{box-sizing:border-box;margin:0}
+body{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;background:var(--ivory);color:var(--ink);font-size:17px;line-height:1.8;padding-bottom:88px;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-weight:700;line-height:1.35}
+p{color:var(--ink-soft)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--petrol);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1100px;margin:auto;padding-inline:18px}
+
+.glass{background:rgba(255,255,255,.94);border:1px solid rgba(22,100,91,.14)}
+@supports (backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px)){.glass{background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(12px) saturate(1.25);backdrop-filter:blur(12px) saturate(1.25);border-color:rgba(255,255,255,.75)}}
+@media (prefers-reduced-transparency:reduce){.glass{background:#fff!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;border-color:var(--line)!important}}
+@media (forced-colors:active){.glass{background:Canvas!important;border:1px solid CanvasText!important;backdrop-filter:none!important}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 26px;border-radius:99px;font:inherit;font-weight:700;text-decoration:none;border:2px solid transparent;transition:transform .2s,background-color .2s}
+.btn-primary{background:var(--petrol);color:#fff;box-shadow:0 10px 24px -10px rgba(22,100,91,.7)}.btn-primary:hover{background:var(--petrol-dark);transform:translateY(-2px)}
+.btn-ghost{color:var(--petrol);border-color:var(--petrol);background:transparent}.btn-ghost:hover{background:var(--mint)}
+.btn.sm{min-height:44px;padding:0 18px;font-size:.95rem}
+
+header.top{position:sticky;top:0;z-index:20;box-shadow:0 8px 24px -18px rgba(32,51,47,.35)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;min-height:64px}
+.brand{font-weight:700;font-size:1.35rem;color:var(--petrol);text-decoration:none}
+.who{display:flex;align-items:center;gap:10px;font-weight:500}
+.av{width:38px;height:38px;border-radius:50%;background:var(--peach);display:grid;place-items:center;font-weight:700}
+
+/* hero: the answer to "what is my next step?" */
+.stage{position:relative;overflow:hidden;border-radius:0 0 36px 36px;background:linear-gradient(135deg,#D6EBE2 0%,#E5F2EC 45%,#F9DCCB 100%);padding:30px 0 40px}
+.stage::before,.stage::after{content:"";position:absolute;border-radius:50%}
+.stage::before{width:300px;height:300px;background:rgba(22,100,91,.16);inset-inline-start:-80px;top:-100px}
+.stage::after{width:240px;height:240px;background:rgba(243,198,173,.7);inset-inline-end:-60px;bottom:-110px}
+.stage .wrap{position:relative;z-index:1;display:grid;gap:20px;grid-template-columns:minmax(0,1fr)}
+.hello h1{font-size:clamp(1.6rem,5vw,2.3rem)}
+.hello p{margin-top:2px;color:var(--ink)}
+.next{border-radius:28px;padding:24px;box-shadow:0 20px 50px -24px rgba(15,74,67,.55);display:grid;gap:14px}
+.next .tag{display:inline-flex;align-items:center;gap:8px;font-weight:700;color:var(--petrol);font-size:.95rem}
+.next .tag i{width:10px;height:10px;border-radius:50%;background:var(--petrol)}
+.next h2{font-size:1.5rem}
+.next p{color:var(--ink-soft)}
+.next .row{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+
+/* journey progress, encouraging not numeric-only */
+.journey{margin-top:-4px}
+.prog{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:500;font-size:.95rem}
+.prog b{color:var(--petrol)}
+.bar{height:12px;border-radius:99px;background:rgba(255,255,255,.7);overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;width:60%;border-radius:99px;background:linear-gradient(270deg,var(--petrol),#2A8E80)}
+.steps{display:flex;gap:4px;margin-top:14px;list-style:none;padding:0}
+.steps li{flex:1;min-width:0;text-align:center;font-size:.8rem;line-height:1.5;color:var(--ink-soft)}
+.steps li span{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;margin:0 auto 4px;background:#fff;border:2px solid var(--line);font-weight:700;font-size:.85rem}
+.steps li.done span{background:var(--petrol);border-color:var(--petrol);color:#fff}
+.steps li.now span{border-color:var(--petrol);color:var(--petrol)}
+.steps li.now{color:var(--ink);font-weight:700}
+
+.grid{display:grid;gap:16px;margin-top:28px}
+.card{background:#fff;border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
+.card h3{font-size:1.1rem;margin-bottom:8px}
+.when{display:flex;align-items:center;gap:14px}
+.date{width:64px;flex:none;text-align:center;background:var(--mint);border-radius:16px;padding:8px 0;line-height:1.2}
+.date b{display:block;font-size:1.6rem;color:var(--petrol)}
+.date span{font-size:.8rem;color:var(--ink-soft)}
+.team{display:flex;align-items:center;gap:14px}
+.team .av2{width:56px;height:56px;border-radius:50%;background:var(--peach-soft);display:grid;place-items:center;flex:none}
+.team .av2 svg{width:44px;height:44px}
+.team b{display:block}
+.contact{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.t{border-radius:18px;padding:16px;background:var(--ivory)}
+.t small{display:block;color:var(--ink-soft);font-size:.85rem}
+.t b{font-size:1.25rem}
+.t.m{background:var(--mint)}.t.p{background:var(--peach-soft)}
+.note{font-size:.88rem;margin-top:12px}
+.emergency{margin-top:20px;font-size:.92rem;border-inline-start:4px solid var(--peach);background:var(--peach-soft);padding:8px 14px;border-radius:0 12px 12px 0;color:var(--ink)}
+
+/* bottom nav on phone */
+.tabbar{position:fixed;inset-inline:0;bottom:0;z-index:30;display:flex;justify-content:space-around;padding:8px 6px calc(8px + env(safe-area-inset-bottom));border-radius:22px 22px 0 0;box-shadow:0 -10px 30px -18px rgba(32,51,47,.4)}
+.tabbar a{display:grid;justify-items:center;gap:0;font-size:.78rem;text-decoration:none;color:var(--ink-soft);min-width:64px;min-height:48px;align-content:center;font-weight:500}
+.tabbar a[aria-current]{color:var(--petrol);font-weight:700}
+.tabbar svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+.rv{opacity:0;transform:translateY(14px);transition:opacity .5s,transform .5s}.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}.rv{opacity:1;transform:none}}
+@media (min-width:860px){
+  body{padding-bottom:0}.tabbar{display:none}
+  .stage .wrap{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);align-items:center;gap:40px}
+  .grid{grid-template-columns:1.1fr 1fr 1fr}
+}
+</style></head>
+<body>
+<header class="top glass"><div class="wrap">
+  <a class="brand" href="#">اتزان</a>
+  <div class="who"><span>منى العلي</span><span class="av" aria-hidden="true">م</span></div>
+</div></header>
+
+<main>
+<section class="stage">
+  <div class="wrap">
+    <div class="hello rv">
+      <h1>أهلًا منى 👋</h1>
+      <p>أنتِ في الأسبوع الخامس من رحلتك. خطوة واحدة تكفي اليوم.</p>
+      <div class="journey">
+        <div class="prog" style="margin-top:18px"><span>تقدّم رحلتك</span><b>٣ من ٥ مراحل</b></div>
+        <div class="bar" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="تقدم الرحلة"><i></i></div>
+        <ol class="steps">
+          <li class="done"><span>✓</span>الاستشارة</li>
+          <li class="done"><span>✓</span>التقييم</li>
+          <li class="done"><span>✓</span>الخطة</li>
+          <li class="now"><span>4</span>المتابعة</li>
+          <li><span>5</span>الاستمرار</li>
+        </ol>
+      </div>
+    </div>
+
+    <article class="next glass rv" aria-labelledby="nx">
+      <span class="tag"><i></i>خطوتك القادمة</span>
+      <h2 id="nx">احجزي موعد المتابعة الثانية</h2>
+      <p>يراجع طبيبك تقدّمك ويعدّل الخطة عند الحاجة. الحجز يأخذ دقيقة واحدة.</p>
+      <div class="row">
+        <a class="btn btn-primary" href="#">احجزي موعدًا</a>
+        <a class="btn btn-ghost" href="#">لاحقًا</a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="grid">
+    <article class="card rv">
+      <h3>موعدك القادم</h3>
+      <div class="when">
+        <div class="date"><b>٢٨</b><span>أكتوبر</span></div>
+        <div><b>متابعة مع د. خالد</b><p>٧:٢٠ مساءً · مكالمة فيديو</p></div>
+      </div>
+      <div class="contact"><a class="btn btn-ghost sm" href="#">تفاصيل الموعد</a></div>
+    </article>
+
+    <article class="card rv">
+      <h3>فريقك</h3>
+      <div class="team">
+        <span class="av2"><svg viewBox="0 0 120 140"><circle cx="60" cy="64" r="44" fill="#E5F2EC"/><path d="M30 62c-6-34 12-48 30-48s36 14 30 48c-2 16-8 26-14 32H44c-6-6-12-16-14-32z" fill="#293A37"/><ellipse cx="60" cy="58" rx="21" ry="25" fill="#E2AE8A"/><circle cx="52" cy="58" r="2.300" fill="#20332F"/><circle cx="68" cy="58" r="2.300" fill="#20332F"/></svg></span>
+        <div><b>د. نورة القحطاني</b><p>طبيبتك المتابعة</p></div>
+      </div>
+      <div class="contact"><a class="btn btn-primary sm" href="#">راسلي الفريق</a><a class="btn btn-ghost sm" href="#">واتساب</a></div>
+    </article>
+
+    <article class="card rv">
+      <h3>هذا الأسبوع</h3>
+      <div class="tiles">
+        <div class="t m"><small>الجرعة القادمة</small><b>الخميس</b></div>
+        <div class="t p"><small>تسجيل القياسات</small><b>تمّ ✓</b></div>
+        <div class="t"><small>الوزن الحالي</small><b>٨٩٫٤ كجم</b></div>
+        <div class="t"><small>الهدف</small><b>٨٠ كجم</b></div>
+      </div>
+      <p class="note">الوزن جزء من الصورة فقط؛ تقدّمك يشمل مواعيدك وخطتك والتزامك.</p>
+    </article>
+  </div>
+  <p class="emergency rv">اتزان ليست خدمة طوارئ. في الحالات الطارئة اتصلي بالهلال الأحمر على <b>997</b>.</p>
+  <p style="font-size:.85rem;margin:16px 0 28px">الأسماء والأرقام في هذا التصور للتوضيح فقط.</p>
+</div>
+</main>
+
+<nav class="tabbar glass" aria-label="التنقل">
+  <a href="#" aria-current="page"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9H4z"/></svg>الرئيسية</a>
+  <a href="#"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>المواعيد</a>
+  <a href="#"><svg viewBox="0 0 24 24"><path d="M5 19c0-9 5-14 15-14 0 10-5 15-14 15"/></svg>خطتي</a>
+  <a href="#"><svg viewBox="0 0 24 24"><path d="M4 6a3 3 0 013-3h10a3 3 0 013 3v8a3 3 0 01-3 3H11l-5 4v-4a3 3 0 01-2-3z"/></svg>الفريق</a>
+</nav>
+<script>
+(function(){var e=[].slice.call(document.querySelectorAll('.rv'));
+if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion:reduce)').matches){e.forEach(function(x){x.classList.add('in')});return}
+var o=new IntersectionObserver(function(s){s.forEach(function(i){if(i.isIntersecting){i.target.classList.add('in');o.unobserve(i.target)}})});e.forEach(function(x){o.observe(x)})})();
+</script>
+</body></html>

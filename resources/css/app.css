@@ -1,0 +1,186 @@
+/* IBM Plex Sans Arabic, self-hosted (no third-party font requests: better for privacy and offline use). */
+@import '@fontsource/ibm-plex-sans-arabic/arabic-400.css';
+@import '@fontsource/ibm-plex-sans-arabic/arabic-500.css';
+@import '@fontsource/ibm-plex-sans-arabic/arabic-600.css';
+@import '@fontsource/ibm-plex-sans-arabic/arabic-700.css';
+@import '@fontsource/ibm-plex-sans-arabic/latin-400.css';
+@import '@fontsource/ibm-plex-sans-arabic/latin-500.css';
+@import '@fontsource/ibm-plex-sans-arabic/latin-600.css';
+@import '@fontsource/ibm-plex-sans-arabic/latin-700.css';
+
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../views';
+
+/*
+ * Brand palette (design direction approved 2026-10):
+ *  ivory  #FAF8F4  page background
+ *  petrol #16645B  primary buttons, links, important elements
+ *  mint   #E5F2EC  calm section backgrounds
+ *  peach  #F3C6AD  small warm touches
+ *  ink    #20332F  text
+ * Colour is never the only carrier of meaning: statuses always carry a text label.
+ * Glass (.glass) is only for floating elements (header, chips, bars, the next-step card); never behind forms, prices, clinical data or long text.
+ */
+@theme {
+    --font-sans: 'IBM Plex Sans Arabic', ui-sans-serif, system-ui, sans-serif;
+
+    --color-petrol: #16645b;
+    --color-petrol-dark: #0f4a43;
+    --color-petrol-soft: #e5f2ec;
+    --color-ivory: #faf8f4;
+    --color-sage: #b9cdbb;
+    --color-sage-soft: #e5f2ec;
+    --color-peach: #f3c6ad;
+    --color-peach-soft: #fbe9de;
+    --color-ink: #20332f;
+    --color-ink-soft: #4b5f5a;
+    --color-line: #e6e0d5;
+
+    --color-success: #1f6b3a;
+    --color-success-soft: #e3f3e8;
+    --color-warning: #7a4a00;
+    --color-warning-soft: #fff1d6;
+    --color-danger: #a4231c;
+    --color-danger-soft: #fde8e6;
+    --color-info: #0f4f7a;
+    --color-info-soft: #e1eff9;
+}
+
+@layer base {
+    html {
+        font-family: var(--font-sans);
+        -webkit-text-size-adjust: 100%;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-ivory text-ink antialiased;
+        font-size: 1rem;
+        line-height: 1.8;
+    }
+
+    h1, h2, h3, h4 {
+        @apply font-semibold text-petrol-dark;
+        line-height: 1.4;
+    }
+
+    /* Links are underlined so they are recognisable without relying on colour; buttons and nav items opt out. */
+    a {
+        @apply text-petrol underline underline-offset-4;
+    }
+
+    :focus-visible {
+        outline: 3px solid var(--color-petrol);
+        outline-offset: 2px;
+        border-radius: 6px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
+}
+
+@layer components {
+    .btn {
+        @apply inline-flex min-h-12 cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-2.5 text-center font-bold no-underline transition duration-200;
+    }
+    .btn-primary { @apply bg-petrol text-white shadow-[0_10px_24px_-10px_rgba(22,100,91,.7)] hover:-translate-y-0.5 hover:bg-petrol-dark; }
+    .btn-peach { @apply bg-peach text-ink hover:-translate-y-0.5; }
+    .btn-secondary { @apply border border-petrol/40 bg-white text-petrol hover:bg-petrol-soft; }
+    .btn-soft { @apply bg-sage-soft text-petrol-dark hover:bg-sage; }
+    .btn-danger { @apply border border-danger/40 bg-white text-danger hover:bg-danger-soft; }
+    .btn-sm { @apply min-h-10 px-4 py-1.5 text-sm; }
+    .btn-block { @apply w-full; }
+    .btn[disabled], .btn[aria-disabled='true'] { @apply cursor-not-allowed opacity-50; }
+
+    .card { @apply rounded-3xl border border-line bg-white p-5 shadow-[0_1px_2px_rgba(32,51,47,.05),0_10px_30px_-12px_rgba(32,51,47,.14)] sm:p-6; }
+    .card-sage { @apply rounded-3xl border border-sage bg-sage-soft p-5 sm:p-6; }
+    .card-peach { @apply rounded-3xl border border-peach/60 bg-peach-soft p-5 sm:p-6; }
+
+    .label { @apply mb-1.5 block font-medium text-ink; }
+    .hint { @apply mt-1 block text-sm text-ink-soft; }
+    .error-text { @apply mt-1 block text-sm font-medium text-danger; }
+    .input {
+        @apply block min-h-12 w-full rounded-xl border border-line bg-white px-4 py-2.5 text-ink placeholder:text-ink-soft/70 focus:border-petrol;
+    }
+    .input[aria-invalid='true'] { @apply border-danger; }
+    textarea.input { @apply min-h-28; }
+
+    .badge { @apply inline-flex items-center gap-1.5 rounded-full border px-3 py-0.5 text-sm font-medium; }
+    .badge-success { @apply border-success/30 bg-success-soft text-success; }
+    .badge-warning { @apply border-warning/30 bg-warning-soft text-warning; }
+    .badge-danger { @apply border-danger/30 bg-danger-soft text-danger; }
+    .badge-info { @apply border-info/30 bg-info-soft text-info; }
+    .badge-neutral { @apply border-line bg-ivory text-ink-soft; }
+
+    .alert { @apply rounded-xl border px-4 py-3 font-medium; }
+    .alert-success { @apply border-success/30 bg-success-soft text-success; }
+    .alert-warning { @apply border-warning/40 bg-warning-soft text-warning; }
+    .alert-danger { @apply border-danger/30 bg-danger-soft text-danger; }
+    .alert-info { @apply border-info/30 bg-info-soft text-info; }
+
+    .table-wrap { @apply overflow-x-auto rounded-2xl border border-line bg-white; }
+    .table { @apply w-full text-start; }
+    .table th { @apply bg-ivory px-4 py-3 text-start text-sm font-semibold text-ink-soft; }
+    .table td { @apply border-t border-line px-4 py-3 align-top; }
+
+    .nav-link { @apply flex min-h-11 items-center gap-2 rounded-xl px-3 py-2 font-medium text-ink no-underline hover:bg-petrol-soft; }
+    .nav-link[aria-current='page'] { @apply bg-petrol text-white hover:bg-petrol; }
+
+    .eyebrow { @apply mb-3 inline-block rounded-full bg-petrol-soft px-3.5 py-0.5 text-sm font-medium text-petrol; }
+    .icon-tile { @apply mb-4 flex size-12 items-center justify-center rounded-2xl bg-petrol-soft text-petrol; }
+    .section { @apply mx-auto w-full max-w-6xl px-4 py-12 sm:px-6 sm:py-16; }
+    .prose-itizan { @apply max-w-none text-lg leading-loose; }
+    .prose-itizan h2 { @apply mt-8 mb-3 text-2xl; }
+    .prose-itizan h3 { @apply mt-6 mb-2 text-xl; }
+    .prose-itizan p { @apply my-3; }
+    .prose-itizan ul { @apply my-3 list-disc ps-6; }
+    .prose-itizan ol { @apply my-3 list-decimal ps-6; }
+}
+
+/* Glass surface: translucent over colour, with a solid fallback wherever blur is unsupported or the user asks for less transparency. */
+.glass {
+    background: rgb(255 255 255 / 0.94);
+    border: 1px solid rgb(22 100 91 / 0.14);
+}
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+    .glass {
+        background: rgb(255 255 255 / 0.82);
+        -webkit-backdrop-filter: blur(12px) saturate(1.25);
+        backdrop-filter: blur(12px) saturate(1.25);
+        border-color: rgb(255 255 255 / 0.75);
+    }
+}
+@media (prefers-reduced-transparency: reduce) {
+    .glass { background: #fff !important; -webkit-backdrop-filter: none !important; backdrop-filter: none !important; border-color: var(--color-line) !important; }
+}
+@media (forced-colors: active) {
+    .glass { background: Canvas !important; border: 1px solid CanvasText !important; backdrop-filter: none !important; }
+}
+
+/* Gentle entrance for below-the-fold blocks. Only hidden when JavaScript is running, and never when motion is reduced. */
+.js .rv { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.js .rv.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .js .rv { opacity: 1; transform: none; transition: none; } }
+
+/* Keyboard skip link becomes visible on focus. */
+.skip-link {
+    position: absolute;
+    inset-inline-start: 0.5rem;
+    top: -4rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    background: var(--color-petrol);
+    color: #fff;
+    border-radius: 0.75rem;
+}
+.skip-link:focus { top: 0.5rem; }
+
+@media print {
+    .no-print { display: none !important; }
+    body { background: #fff; }
+}

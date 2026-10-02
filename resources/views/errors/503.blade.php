@@ -1,0 +1,1 @@
+@include('errors.layout', ['code' => 503, 'heading' => __('نُجري صيانة قصيرة'), 'message' => __('سنعود خلال دقائق. في الحالات الطارئة اتصل بالهلال الأحمر على :number.', ['number' => config('itizan.emergency_number')])])

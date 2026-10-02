@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اتزان — تصور الصفحة الرئيسية</title>
+<style>
+@font-face{font-family:"IBM Plex Sans Arabic";font-weight:400;font-display:swap;src:url(../../node_modules/@fontsource/ibm-plex-sans-arabic/files/ibm-plex-sans-arabic-arabic-400-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Sans Arabic";font-weight:500;font-display:swap;src:url(../../node_modules/@fontsource/ibm-plex-sans-arabic/files/ibm-plex-sans-arabic-arabic-500-normal.woff2) format("woff2")}
+@font-face{font-family:"IBM Plex Sans Arabic";font-weight:700;font-display:swap;src:url(../../node_modules/@fontsource/ibm-plex-sans-arabic/files/ibm-plex-sans-arabic-arabic-700-normal.woff2) format("woff2")}
+
+:root{
+  --ivory:#FAF8F4; --petrol:#16645B; --petrol-dark:#0F4A43; --mint:#E5F2EC; --peach:#F3C6AD; --peach-soft:#FBE9DE;
+  --ink:#20332F; --ink-soft:#4B5F5A; --line:#E6E0D5; --white:#fff;
+  --r-sm:14px; --r-md:22px; --r-lg:32px;
+  --shadow:0 1px 2px rgba(32,51,47,.05),0 10px 30px -12px rgba(32,51,47,.18);
+}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;background:var(--ivory);color:var(--ink);font-size:17px;line-height:1.85;-webkit-font-smoothing:antialiased;padding-bottom:84px}
+h1,h2,h3{font-weight:700;line-height:1.35;letter-spacing:0}
+h1{font-size:clamp(2rem,6.4vw,3.6rem);text-wrap:balance}
+h2{font-size:clamp(1.55rem,4.2vw,2.3rem)}
+h3{font-size:1.15rem}
+p{color:var(--ink-soft)}
+a{color:inherit}
+.wrap{max-width:1160px;margin-inline:auto;padding-inline:20px}
+.eyebrow{display:inline-block;font-weight:500;font-size:.92rem;color:var(--petrol);background:var(--mint);padding:2px 14px;border-radius:99px;margin-bottom:14px}
+section{padding-block:clamp(56px,9vw,104px)}
+:focus-visible{outline:3px solid var(--petrol);outline-offset:3px;border-radius:8px}
+
+
+/* glass: only on floating elements, never behind long text, forms, prices or clinical data */
+.glass{background:rgba(255,255,255,.94);border:1px solid rgba(22,100,91,.14)}
+@supports (backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px)){
+  .glass{background:rgba(255,255,255,.82);-webkit-backdrop-filter:blur(12px) saturate(1.25);backdrop-filter:blur(12px) saturate(1.25);border-color:rgba(255,255,255,.75)}
+}
+@media (prefers-reduced-transparency:reduce){.glass{background:#fff!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-color:var(--line)!important}}
+@media (forced-colors:active){.glass{background:Canvas!important;border:1px solid CanvasText!important;backdrop-filter:none!important}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 28px;border-radius:99px;font:inherit;font-weight:700;font-size:1.05rem;text-decoration:none;border:2px solid transparent;cursor:pointer;transition:transform .2s ease,background-color .2s ease,box-shadow .2s ease}
+.btn-primary{background:var(--petrol);color:#fff;box-shadow:0 10px 24px -10px rgba(22,100,91,.7)}
+.btn-primary:hover{background:var(--petrol-dark);transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--petrol);border-color:var(--petrol)}
+.btn-ghost:hover{background:var(--mint)}
+.btn-peach{background:var(--peach);color:var(--ink)}
+.btn-peach:hover{transform:translateY(-2px)}
+.btn svg{width:20px;height:20px;flex:none}
+
+/* header */
+header.top{position:sticky;top:0;z-index:20;border-bottom:1px solid rgba(22,100,91,.1);box-shadow:0 8px 24px -18px rgba(32,51,47,.35)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;min-height:68px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.4rem;color:var(--petrol);text-decoration:none}
+.brand i{width:34px;height:34px;border-radius:11px;background:var(--petrol);display:grid;place-items:center}
+.brand i svg{width:20px;height:20px}
+nav.links{display:none;gap:28px;font-weight:500}
+nav.links a{text-decoration:none;color:var(--ink-soft)}
+nav.links a:hover{color:var(--petrol)}
+.top .btn{min-height:44px;padding:0 20px;font-size:.95rem}
+.top .login{display:none;text-decoration:none;font-weight:500;color:var(--ink-soft)}
+
+/* hero */
+.hero{padding-block:clamp(28px,6vw,72px) clamp(48px,8vw,96px);position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset-inline-start:-140px;top:-120px;width:420px;height:420px;border-radius:50%;background:var(--mint);z-index:0}
+.hero .wrap{position:relative;z-index:1;display:grid;gap:36px}
+.hero .copy p{font-size:1.15rem;max-width:34em;margin-top:18px}
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.hero small{display:block;margin-top:18px;font-size:.9rem;color:var(--ink-soft)}
+.hero-art{position:relative;max-width:480px;width:100%;margin-inline:auto}
+.arch{aspect-ratio:4/5;border-radius:999px 999px var(--r-lg) var(--r-lg);overflow:hidden;background:linear-gradient(180deg,var(--peach-soft),var(--peach));box-shadow:var(--shadow)}
+.arch svg{width:100%;height:100%;display:block}
+.chip{position:absolute;display:flex;align-items:center;gap:10px;border-radius:18px;padding:10px 16px 10px 18px;font-weight:700;font-size:.98rem;box-shadow:0 12px 30px -12px rgba(32,51,47,.35)}
+.chip i{width:34px;height:34px;border-radius:12px;background:var(--mint);display:grid;place-items:center;flex:none}
+.chip i svg{width:19px;height:19px;stroke:var(--petrol)}
+.sticky .wa svg{stroke:currentColor}
+.chip.a{inset-inline-start:-10px;top:18%}
+.chip.b{inset-inline-end:-6px;bottom:14%}
+.photo-note{position:absolute;inset-inline:0;bottom:-2px;text-align:center;font-size:.72rem;color:rgba(32,51,47,.55);padding:4px}
+
+/* alone */
+.alone{background:var(--mint)}
+.alone .grid{display:grid;gap:36px;align-items:start}
+.alone ul{list-style:none;padding:0;display:grid;gap:0}
+.alone li{display:flex;gap:16px;padding:20px 0;border-bottom:1px solid rgba(22,100,91,.18);font-size:1.12rem;color:var(--ink);font-weight:500}
+.alone li:last-child{border:0}
+.alone li svg{width:26px;height:26px;stroke:var(--petrol);flex:none;margin-top:4px}
+.alone .reply{margin-top:22px;font-weight:700;color:var(--petrol);font-size:1.15rem}
+
+/* steps */
+.steps ol{list-style:none;padding:0;margin-top:44px;display:grid;gap:28px;counter-reset:s}
+.steps li{position:relative;padding-inline-start:84px;min-height:64px}
+.steps li::before{counter-increment:s;content:counter(s);position:absolute;inset-inline-start:0;top:0;width:60px;height:60px;border-radius:50%;background:var(--petrol);color:#fff;display:grid;place-items:center;font-size:1.5rem;font-weight:700;z-index:1}
+.steps li:not(:last-child)::after{content:"";position:absolute;inset-inline-start:29px;top:60px;bottom:-28px;width:2px;background:repeating-linear-gradient(var(--petrol) 0 6px,transparent 6px 12px);opacity:.35}
+.steps li:nth-child(2)::before{background:#0F4A43}
+.steps h3{margin-bottom:4px}
+
+/* included (asymmetric bento) */
+.included{background:#fff;border-block:1px solid var(--line)}
+.bento{display:grid;gap:16px;margin-top:40px}
+.tile{border-radius:var(--r-md);padding:26px;background:var(--ivory);transition:transform .25s ease,box-shadow .25s ease}
+.tile:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.tile .ic{width:52px;height:52px;border-radius:16px;background:var(--mint);display:grid;place-items:center;margin-bottom:16px}
+.tile .ic svg{width:27px;height:27px;stroke:var(--petrol)}
+.tile h3{margin-bottom:6px}
+.tile.big{background:var(--petrol);color:#fff}
+.tile.big p{color:rgba(255,255,255,.86)}
+.tile.big .ic{background:rgba(255,255,255,.14)}
+.tile.big .ic svg{stroke:#fff}
+.tile.warm{background:var(--peach-soft)}
+.tile.warm .ic{background:var(--peach)}
+.tile.mint{background:var(--mint)}
+.tile.mint .ic{background:#fff}
+.note{margin-top:22px;font-size:.95rem;border-inline-start:4px solid var(--peach);padding:6px 14px;background:var(--peach-soft);border-radius:0 12px 12px 0;color:var(--ink)}
+
+/* team */
+.team .row{display:grid;gap:22px;margin-top:40px}
+.person{background:#fff;border-radius:var(--r-md);overflow:hidden;box-shadow:var(--shadow);display:grid;grid-template-columns:120px 1fr;align-items:center}
+.person .ph{height:100%;min-height:132px}
+.person .ph svg{width:100%;height:100%;display:block}
+.person div.t{padding:16px 18px}
+.person b{display:block;font-size:1.08rem}
+.person span{color:var(--ink-soft);font-size:.95rem}
+.demo-note{margin-top:18px;font-size:.85rem;color:var(--ink-soft)}
+
+/* packages */
+.packages{background:linear-gradient(180deg,var(--ivory),var(--mint))}
+.pk{display:grid;gap:20px;margin-top:40px;align-items:stretch}
+.plan{background:#fff;border-radius:var(--r-lg);padding:30px 28px;box-shadow:var(--shadow);position:relative;display:flex;flex-direction:column;border:2px solid transparent}
+.plan.pop{border-color:var(--petrol)}
+.plan .tag{position:absolute;top:-14px;inset-inline-start:24px;background:var(--peach);padding:2px 14px;border-radius:99px;font-weight:700;font-size:.88rem}
+.price{display:flex;align-items:baseline;gap:8px;margin:12px 0 2px}
+.price b{font-size:2.8rem;line-height:1.1;color:var(--petrol)}
+.price span{font-weight:500;color:var(--ink-soft)}
+.plan ul{list-style:none;padding:0;margin:20px 0 26px;display:grid;gap:10px;flex:1}
+.plan li{display:flex;gap:10px;font-size:1rem}
+.plan li svg{width:22px;height:22px;stroke:var(--petrol);flex:none;margin-top:3px}
+.plan li.no{color:var(--ink-soft)}
+.plan li.no svg{stroke:#A39E92}
+.fine{margin-top:20px;font-size:.9rem}
+
+/* faq */
+.faq .list{max-width:780px;margin:36px auto 0;display:grid;gap:12px}
+details{background:#fff;border-radius:var(--r-sm);border:1px solid var(--line);padding:0 20px}
+summary{cursor:pointer;list-style:none;min-height:60px;display:flex;align-items:center;justify-content:space-between;gap:14px;font-weight:700}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:1.6rem;color:var(--petrol);transition:transform .2s}
+details[open] summary::after{transform:rotate(45deg)}
+details p{padding-bottom:18px}
+
+/* final */
+.final{padding-block:0 clamp(56px,9vw,100px)}
+.band{background:var(--petrol);color:#fff;border-radius:var(--r-lg);padding:clamp(36px,7vw,72px) 28px;text-align:center;position:relative;overflow:hidden}
+.band::after{content:"";position:absolute;inset-inline-end:-60px;bottom:-80px;width:240px;height:240px;border-radius:50%;background:rgba(243,198,173,.25)}
+.band p{color:rgba(255,255,255,.88);margin:12px auto 26px;max-width:32em}
+.band .btn{position:relative;z-index:1}
+
+footer{border-top:1px solid var(--line);padding-block:32px;font-size:.92rem}
+footer .wrap{display:grid;gap:10px}
+footer b{color:var(--ink)}
+
+/* sticky mobile bar */
+.sticky{position:fixed;inset-inline:0;bottom:0;z-index:30;padding:10px 16px calc(10px + env(safe-area-inset-bottom));border-top:1px solid rgba(22,100,91,.1);border-inline:0;border-radius:22px 22px 0 0;display:flex;gap:10px;box-shadow:0 -10px 30px -18px rgba(32,51,47,.4)}
+.sticky .btn{flex:1;min-height:52px;padding:0 16px}
+.sticky .wa{flex:none;width:52px;padding:0;background:var(--mint);border-color:transparent;color:var(--petrol)}
+
+/* motion */
+.rv{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease}
+.rv.in{opacity:1;transform:none}
+.js-off .rv{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}.rv{opacity:1;transform:none}}
+
+@media (min-width:768px){
+  body{padding-bottom:0}
+  .sticky{display:none}
+  nav.links{display:flex}
+  .top .login{display:inline}
+  .bento{grid-template-columns:repeat(6,1fr)}
+  .tile.big{grid-column:span 3;grid-row:span 2}
+  .tile.t2{grid-column:span 3}
+  .tile.t3{grid-column:span 3}
+  .tile.t4,.tile.t5,.tile.t6{grid-column:span 2}
+  .team .row{grid-template-columns:repeat(3,1fr)}
+  .person{grid-template-columns:1fr;text-align:center}
+  .person .ph{height:230px}
+  .pk{grid-template-columns:1fr 1fr;max-width:860px;margin-inline:auto}
+  .steps ol{grid-template-columns:repeat(3,1fr);gap:32px}
+  .steps li{padding:84px 0 0}
+  .steps li::before{top:0}
+  .steps li:not(:last-child)::after{inset-inline-start:76px;inset-inline-end:-32px;width:auto;top:29px;bottom:auto;height:2px;background:repeating-linear-gradient(to left,var(--petrol) 0 6px,transparent 6px 12px)}
+  .alone .grid{grid-template-columns:1fr 1.1fr;gap:72px}
+}
+@media (min-width:980px){
+  .hero .wrap{grid-template-columns:1.1fr .9fr;align-items:center;gap:64px}
+}
+</style>
+</head>
+<body>
+<!-- Symbols reused across the page -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round"><path d="M6 12h12"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.4-7-10a4 4 0 017-2.4A4 4 0 0119 10c0 5.600-7 10-7 10z"/></symbol>
+    <symbol id="i-plan" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="4" width="14" height="17" rx="3"/><path d="M9 4V3h6v1M9 11h6M9 15h4"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6a3 3 0 013-3h10a3 3 0 013 3v8a3 3 0 01-3 3H11l-5 4v-4a3 3 0 01-2-3z"/></symbol>
+    <symbol id="i-steth" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v6a4 4 0 008 0V3M10 13v2a5 5 0 0010 0v-1"/><circle cx="20" cy="12" r="2"/></symbol>
+    <symbol id="i-leaf" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-9 5-14 15-14 0 10-5 15-14 15M5 19c3-4 6-6 10-8"/></symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 17l5-5 4 4 7-8M15 8h5v5"/></symbol>
+    <symbol id="i-box" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l8-4 8 4-8 4zM4 8v8l8 4 8-4V8M12 12v8"/></symbol>
+    <symbol id="i-wa" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20l1.2-4A8 8 0 118 19z"/><path d="M9 9c0 3 3 6 6 6l1-1.500-2-1-1 .8c-1-.4-2-1.400-2.400-2.400l.8-1-1-2z"/></symbol>
+    <symbol id="i-hand" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-5-3-8-6-8-10a4 4 0 018-1 4 4 0 018 1c0 4-3 7-8 10z"/></symbol>
+    <symbol id="i-q" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M9.500 9.500a2.500 2.500 0 114 2c-1 .8-1.500 1.200-1.500 2.500M12 17h.01"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  </defs>
+</svg>
+
+<header class="top glass">
+  <div class="wrap">
+    <a class="brand" href="#"><i><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.200" stroke-linecap="round"><path d="M5 15c3-6 11-6 14 0M12 6v5"/></svg></i>اتزان</a>
+    <nav class="links" aria-label="التنقل">
+      <a href="#how">كيف تبدأ</a><a href="#included">ما يشمله البرنامج</a><a href="#team">الفريق</a><a href="#packages">الباقات</a><a href="#faq">الأسئلة</a>
+    </nav>
+    <div style="display:flex;align-items:center;gap:18px"><a class="login" href="#">تسجيل الدخول</a><a class="btn btn-primary" href="#">ابدأ الآن</a></div>
+  </div>
+</header>
+
+<main>
+<!-- 1. hero -->
+<section class="hero">
+  <div class="wrap">
+    <div class="copy rv">
+      <span class="eyebrow">برنامج إدارة الوزن بإشراف طبي</span>
+      <h1>رحلتك لوزن صحي… تبدأ باتزان</h1>
+      <p>رعاية طبية ومتابعة مستمرة تساعدك تبدأ بخطة تناسبك، وتكمل بثقة.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>ابدأ باستشارة مجانية</a>
+        <a class="btn btn-ghost" href="#how">تعرّف على البرنامج</a>
+      </div>
+      <small>الاستشارة المجانية تعريفية بالبرنامج، وليست تشخيصًا ولا وصفًا للعلاج.</small>
+    </div>
+
+    <div class="hero-art rv">
+      <div class="arch" role="img" aria-label="صورة توضيحية: شخص مبتسم في لحظة يومية">
+        <svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMax slice">
+          <circle cx="320" cy="90" r="70" fill="#fff" opacity=".35"/>
+          <circle cx="60" cy="300" r="90" fill="#fff" opacity=".25"/>
+          <!-- body: abaya / soft green top -->
+          <path d="M60 500c0-95 60-150 140-150s140 55 140 150z" fill="#16645B"/>
+          <!-- hijab -->
+          <path d="M118 262c-6-92 30-146 82-146s88 54 82 146c-2 30-12 56-26 76l30 70H114l30-70c-14-20-24-46-26-76z" fill="#0F4A43"/>
+          <ellipse cx="200" cy="250" rx="50" ry="62" fill="#D9A07A"/>
+          <!-- face -->
+          <circle cx="182" cy="248" r="4.500" fill="#20332F"/><circle cx="218" cy="248" r="4.500" fill="#20332F"/>
+          <path d="M178 276q22 20 44 0" fill="none" stroke="#20332F" stroke-width="4.500" stroke-linecap="round"/>
+          <circle cx="168" cy="266" r="9" fill="#E9A68F" opacity=".5"/><circle cx="232" cy="266" r="9" fill="#E9A68F" opacity=".5"/>
+          <!-- cup -->
+          <rect x="270" y="418" width="46" height="54" rx="10" fill="#fff"/><path d="M316 430q22 0 22 18t-22 18" fill="none" stroke="#fff" stroke-width="7"/>
+        </svg>
+      </div>
+      <span class="chip a glass"><i><svg><use href="#i-heart"/></svg></i>متابعة مستمرة</span>
+      <span class="chip b glass"><i><svg><use href="#i-plan"/></svg></i>خطة تناسبك</span>
+      <div class="photo-note">رسم توضيحي مؤقت — يُستبدل بصورة حقيقية مرخّصة</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. you do not face it alone -->
+<section class="alone">
+  <div class="wrap grid">
+    <div class="rv">
+      <span class="eyebrow" style="background:#fff">نفهمك</span>
+      <h2>ما تحتاج تواجه الرحلة وحدك</h2>
+      <p class="reply">نبدأ من وضعك أنت، بدون لوم وبدون أحكام.</p>
+    </div>
+    <ul class="rv">
+      <li><svg viewBox="0 0 24 24"><use href="#i-q"/></svg>جرّبت حلولًا كثيرة ولم تستمر معك، وتبغى طريقة تناسب حياتك.</li>
+      <li><svg viewBox="0 0 24 24"><use href="#i-hand"/></svg>لا تعرف من أين تبدأ، وتحتاج من يشرح لك الخطوة الأولى بهدوء.</li>
+      <li><svg viewBox="0 0 24 24"><use href="#i-steth"/></svg>عندك حالة صحية أو أدوية، وتريد رعاية آمنة يشرف عليها طبيب.</li>
+      <li><svg viewBox="0 0 24 24"><use href="#i-chat"/></svg>تحتاج شخصًا يتابعك ويجاوب أسئلتك في الوقت الذي تحتاجه.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 3. how to start -->
+<section class="steps" id="how">
+  <div class="wrap">
+    <div class="rv" style="max-width:34em"><span class="eyebrow">ثلاث خطوات</span><h2>كيف تبدأ؟</h2></div>
+    <ol class="rv">
+      <li><h3>استشارة أولى</h3><p>تحجز استشارة مجانية تتعرّف فيها على البرنامج وكيف تسير الرحلة.</p></li>
+      <li><h3>خطة مناسبة</h3><p>تعبّئ تقييمك الصحي، ويراجعه الطبيب ويضع لك خطة تناسبك.</p></li>
+      <li><h3>متابعة مستمرة</h3><p>تتابع تقدّمك ومواعيدك، ويبقى فريقك قريبًا منك في كل مرحلة.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 4. what is included -->
+<section class="included" id="included">
+  <div class="wrap">
+    <div class="rv" style="max-width:34em"><span class="eyebrow">ما يشمله البرنامج</span><h2>كل ما تحتاجه في مكان واحد</h2></div>
+    <div class="bento">
+      <article class="tile big t1 rv"><div class="ic"><svg viewBox="0 0 24 24"><use href="#i-steth"/></svg></div><h3>إشراف طبي حقيقي</h3><p>طبيب يراجع تقييمك ويضع خطتك. العلاج والدواء يقررهما الطبيب وحده، وليس التطبيق ولا العميل.</p></article>
+      <article class="tile warm t2 rv"><div class="ic"><svg viewBox="0 0 24 24"><use href="#i-leaf"/></svg></div><h3>أخصائي تغذية</h3><p>إرشادات غذائية مناسبة لنمط حياتك.</p></article>
+      <article class="tile mint t3 rv"><div class="ic"><svg viewBox="0 0 24 24"><use href="#i-trend"/></svg></div><h3>تقدّم تراه بوضوح</h3><p>رحلتك كاملة: القياسات والمواعيد والخطوات.</p></article>
+      <article class="tile t4 rv"><div class="ic"><svg viewBox="0 0 24 24"><use href="#i-clock"/></svg></div><h3>تذكيرات هادئة</h3><p>تنبيهات المواعيد والجرعات دون إزعاج.</p></article>
+      <article class="tile t5 rv"><div class="ic"><svg viewBox="0 0 24 24"><use href="#i-box"/></svg></div><h3>طلب وتوصيل</h3><p>الدواء بوصفة الطبيب للمشتركين.</p></article>
+      <article class="tile t6 rv"><div class="ic"><svg viewBox="0 0 24 24"><use href="#i-wa"/></svg></div><h3>دعم عبر واتساب</h3><p>فريق يرد عليك عند الحاجة.</p></article>
+    </div>
+    <p class="note rv">اتزان ليست خدمة طوارئ. في الحالات الطارئة اتصل بالهلال الأحمر على <b>997</b>.</p>
+  </div>
+</section>
+
+<!-- 5. team -->
+<section class="team" id="team">
+  <div class="wrap">
+    <div class="rv" style="max-width:34em"><span class="eyebrow">فريقك</span><h2>أشخاص حقيقيون يتابعونك</h2></div>
+    <div class="row">
+      <article class="person rv">
+        <div class="ph"><svg viewBox="0 0 120 140" preserveAspectRatio="xMidYMin slice"><rect width="120" height="140" fill="#E5F2EC"/><path d="M10 140c0-34 22-52 50-52s50 18 50 52z" fill="#fff"/><path d="M48 92l12 22 12-22z" fill="#16645B"/><rect x="52" y="66" width="16" height="24" rx="7" fill="#C98F6C"/><ellipse cx="60" cy="52" rx="23" ry="27" fill="#D9A07A"/><path d="M36 50c2-22 16-30 24-30s22 8 24 30c-6-10-14-14-24-14s-18 4-24 14z" fill="#F4F1EA"/><path d="M37 46c4-24 40-24 46 0 0-10-8-22-23-22s-23 12-23 22z" fill="#F4F1EA"/><circle cx="52" cy="54" r="2.300" fill="#20332F"/><circle cx="68" cy="54" r="2.300" fill="#20332F"/><path d="M53 64q7 6 14 0" stroke="#20332F" stroke-width="2.200" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="t"><b>د. خالد الحربي</b><span>استشاري غدد صماء وسمنة</span></div>
+      </article>
+      <article class="person rv">
+        <div class="ph"><svg viewBox="0 0 120 140" preserveAspectRatio="xMidYMin slice"><rect width="120" height="140" fill="#FBE9DE"/><path d="M10 140c0-34 22-52 50-52s50 18 50 52z" fill="#fff"/><path d="M48 92l12 22 12-22z" fill="#16645B"/><rect x="52" y="66" width="16" height="24" rx="7" fill="#D9A07A"/><path d="M30 62c-6-34 12-48 30-48s36 14 30 48c-2 16-8 26-14 32H44c-6-6-12-16-14-32z" fill="#293A37"/><ellipse cx="60" cy="54" rx="21" ry="25" fill="#E2AE8A"/><circle cx="52" cy="54" r="2.300" fill="#20332F"/><circle cx="68" cy="54" r="2.300" fill="#20332F"/><path d="M53 64q7 6 14 0" stroke="#20332F" stroke-width="2.200" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="t"><b>د. نورة القحطاني</b><span>استشارية سمنة وتغذية علاجية</span></div>
+      </article>
+      <article class="person rv">
+        <div class="ph"><svg viewBox="0 0 120 140" preserveAspectRatio="xMidYMin slice"><rect width="120" height="140" fill="#B9CDBB" opacity=".6"/><path d="M10 140c0-34 22-52 50-52s50 18 50 52z" fill="#16645B"/><rect x="52" y="66" width="16" height="24" rx="7" fill="#C98F6C"/><path d="M30 62c-6-34 12-48 30-48s36 14 30 48c-2 16-8 26-14 32H44c-6-6-12-16-14-32z" fill="#6B4A3A"/><ellipse cx="60" cy="54" rx="21" ry="25" fill="#D9A07A"/><circle cx="52" cy="54" r="2.300" fill="#20332F"/><circle cx="68" cy="54" r="2.300" fill="#20332F"/><path d="M53 64q7 6 14 0" stroke="#20332F" stroke-width="2.200" fill="none" stroke-linecap="round"/></svg></div>
+        <div class="t"><b>سارة العتيبي</b><span>أخصائية تغذية علاجية</span></div>
+      </article>
+    </div>
+    <p class="demo-note rv">الأسماء والرسومات هنا مؤقتة للتصور فقط؛ تُستبدل بصور وأسماء الفريق الفعلي بعد توثيق الرخص المهنية.</p>
+  </div>
+</section>
+
+<!-- 6. packages -->
+<section class="packages" id="packages">
+  <div class="wrap">
+    <div class="rv" style="max-width:34em"><span class="eyebrow">الباقات</span><h2>اختر المدة التي تناسبك</h2><p style="margin-top:10px">الأسعار بالريال السعودي وتشمل ضريبة القيمة المضافة.</p></div>
+    <div class="pk">
+      <article class="plan rv">
+        <h3>الباقة النصف سنوية</h3>
+        <div class="price"><b>999</b><span>ر.س / ٦ أشهر</span></div>
+        <p>بداية مناسبة لخطة منظمة.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>مراجعة الطبيب لتقييمك وخطتك</li>
+          <li><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>٣ استشارات متابعة</li>
+          <li><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>متابعة الخطة والقياسات في حساب واحد</li>
+          <li><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>تنبيهات الجرعات وتسجيل الأعراض</li>
+          <li class="no"><svg viewBox="0 0 24 24"><use href="#i-x"/></svg>الدواء والتحاليل غير مشمولين</li>
+        </ul>
+        <a class="btn btn-ghost" href="#">اختر هذه الباقة</a>
+      </article>
+      <article class="plan pop rv">
+        <span class="tag">قيمة أفضل</span>
+        <h3>الباقة السنوية</h3>
+        <div class="price"><b>1,499</b><span>ر.س / ١٢ شهرًا</span></div>
+        <p>وقت أطول لثبات العادات.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>مراجعة الطبيب لتقييمك وخطتك</li>
+          <li><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>٦ استشارات متابعة</li>
+          <li><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>متابعة الخطة والقياسات في حساب واحد</li>
+          <li><svg viewBox="0 0 24 24"><use href="#i-check"/></svg>تنبيهات الجرعات وتسجيل الأعراض</li>
+          <li class="no"><svg viewBox="0 0 24 24"><use href="#i-x"/></svg>الدواء والتحاليل غير مشمولين</li>
+        </ul>
+        <a class="btn btn-primary" href="#">اختر هذه الباقة</a>
+      </article>
+    </div>
+    <p class="fine rv">أعداد الاستشارات مقترحة وتُعتمد قبل الإطلاق.</p>
+  </div>
+</section>
+
+<!-- 7. faq -->
+<section class="faq" id="faq">
+  <div class="wrap">
+    <div class="rv" style="text-align:center"><span class="eyebrow">أسئلة شائعة</span><h2>عندك سؤال؟</h2></div>
+    <div class="list rv">
+      <details><summary>هل الاستشارة المجانية تشمل علاجًا؟</summary><p>لا. هي جلسة تعريفية بالبرنامج. التشخيص والعلاج يتمان بعد تقييمك ومراجعة الطبيب.</p></details>
+      <details><summary>من يقرر الدواء؟</summary><p>الطبيب وحده. لا نصرف دواءً تلقائيًا، ولا تقدر تغيّر جرعتك بنفسك.</p></details>
+      <details><summary>هل بياناتي الصحية آمنة؟</summary><p>نحفظها مشفّرة، ولا نستخدمها لأغراض التسويق أبدًا. الموافقات تؤخذ منفصلة وتقدر تسحبها.</p></details>
+      <details><summary>ماذا لو احتجت مساعدة عاجلة؟</summary><p>اتصل بالهلال الأحمر 997. اتزان ليست خدمة طوارئ.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- 8. final call -->
+<section class="final">
+  <div class="wrap"><div class="band rv">
+    <h2>خطوتك الأولى أبسط مما تتخيل</h2>
+    <p>احجز استشارة مجانية، واعرف كيف يمكن لاتزان أن يرافقك.</p>
+    <a class="btn btn-peach" href="#">ابدأ باستشارة مجانية</a>
+  </div></div>
+</section>
+</main>
+
+<footer><div class="wrap">
+  <div><b>اتزان</b> · برنامج إدارة الوزن بإشراف طبي</div>
+  <div>لا نستخدم بياناتك الصحية في التسويق. اتزان ليست خدمة طوارئ — الهلال الأحمر 997.</div>
+</div></footer>
+
+<div class="sticky glass">
+  <a class="btn btn-primary" href="#">ابدأ باستشارة مجانية</a>
+  <a class="btn wa" href="#" aria-label="تواصل عبر واتساب"><svg viewBox="0 0 24 24"><use href="#i-wa"/></svg></a>
+</div>
+
+<script>
+(function(){
+  var els=[].slice.call(document.querySelectorAll('.rv'));
+  if(!('IntersectionObserver' in window)||matchMedia('(prefers-reduced-motion:reduce)').matches){els.forEach(function(e){e.classList.add('in')});return}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}})},{rootMargin:'0px 0px -8% 0px'});
+  els.forEach(function(e){io.observe(e)});
+})();
+</script>
+</body>
+</html>
